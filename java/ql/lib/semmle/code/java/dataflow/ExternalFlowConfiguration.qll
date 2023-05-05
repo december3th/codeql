@@ -39,8 +39,8 @@ private string childThreatModel(string group) {
  */
 bindingset[kind]
 predicate supportedSourceModel(string kind) {
-  // expansive threat model includes all kinds
-  supportedThreatModel("expansive")
+  // all threat model includes all kinds
+  supportedThreatModel("all")
   or
   // check if this kind is supported directly
   supportedThreatModel(kind)
@@ -48,12 +48,12 @@ predicate supportedSourceModel(string kind) {
   // check if one of this kind's ancestors are supported
   exists(string group | group = parentThreatModel(kind) | supportedThreatModel(group))
   or
-  // if supportedThreatModel is empty, check if kind is a subtype of "standard"
+  // if supportedThreatModel is empty, check if kind is a subtype of "default"
   not supportedThreatModel(_) and
-  ("standard" = parentThreatModel(kind) or "standard" = kind)
+  ("default" = parentThreatModel(kind) or "default" = kind)
 }
 
-private string getGlobalGroups() { result = ["standard", "expansive"] }
+private string getGlobalGroups() { result = ["default", "all"] }
 
 /**
  * A class that represents a kind of any model or group.
@@ -81,11 +81,11 @@ string relatedSourceModel(Kind kind) {
   result = kind
   or
   // Use all kinds regardless of the query.
-  supportedThreatModel("expansive") and
+  supportedThreatModel("all") and
   result = kind and
   sourceModel(_, _, _, _, _, _, _, result, _)
   or
-  // Use the kinds that are provided by the threat model in case it is not standard or expansive.
+  // Use the kinds that are provided by the threat model in case it is not default or all.
   exists(string model | not model = getGlobalGroups() and supportedThreatModel(model) |
     result = model
     or

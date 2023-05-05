@@ -5,4 +5,4 @@ extensions:
       extensible: supportedThreatModel
     data:
       - ["remote"]
-      - ["sql"]
+      - ["database"]

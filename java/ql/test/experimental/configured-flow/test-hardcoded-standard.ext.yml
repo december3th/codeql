@@ -4,4 +4,4 @@ extensions:
       pack: codeql/java-tests
       extensible: supportedThreatModel
     data:
-      - ["standard"]
+      - ["default"]
